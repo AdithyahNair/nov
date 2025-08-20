@@ -36,103 +36,103 @@ const DetailDialog = ({
   onOpenChange,
   title,
   data,
-}: DetailDialogProps) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white">
-      <DialogHeader className="border-b pb-4">
-        <DialogTitle className="text-2xl font-bold text-gray-900">
-          {title}
-        </DialogTitle>
-      </DialogHeader>
-      <div className="space-y-4 py-4">
-        {data && (
-          <div className="grid gap-4">
-            {/* Status Overview */}
-            <div className="border-l-2 border-l-blue-500 p-4">
-              <h3 className="text-lg font-semibold mb-4">Status Overview</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-xl font-bold mb-1">{data.status}</div>
-                  <div className="text-sm text-gray-600">Status</div>
-                </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-xl font-bold mb-1 text-blue-600">
-                    {data.accuracy}
+}: DetailDialogProps) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg max-w-4xl max-h-[80vh] overflow-y-auto w-full mx-4">
+        <div className="border-b pb-4 p-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="text-gray-500 hover:text-gray-700 text-xl"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+        <div className="p-6 space-y-4">
+          {data && (
+            <div className="grid gap-4">
+              {/* Status Overview */}
+              <div className="border-l-2 border-l-blue-500 p-4">
+                <h3 className="text-lg font-semibold mb-4">Status Overview</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xl font-bold mb-1">{data.status}</div>
+                    <div className="text-sm text-gray-600">Status</div>
                   </div>
-                  <div className="text-sm text-gray-600">Accuracy</div>
-                </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-xl font-bold mb-1 text-green-600">
-                    {data.uptime || "N/A"}
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xl font-bold mb-1 text-blue-600">
+                      {data.accuracy}
+                    </div>
+                    <div className="text-sm text-gray-600">Accuracy</div>
                   </div>
-                  <div className="text-sm text-gray-600">Uptime</div>
-                </div>
-                <div className="text-center p-3 bg-gray-50 rounded-lg">
-                  <div className="text-xl font-bold mb-1 text-blue-600">
-                    {data.lastCheck || "2 hrs ago"}
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xl font-bold mb-1 text-green-600">
+                      {data.uptime || "N/A"}
+                    </div>
+                    <div className="text-sm text-gray-600">Uptime</div>
                   </div>
-                  <div className="text-sm text-gray-600">Last Check</div>
+                  <div className="text-center p-3 bg-gray-50 rounded-lg">
+                    <div className="text-xl font-bold mb-1 text-blue-600">
+                      {data.lastCheck || "2 hrs ago"}
+                    </div>
+                    <div className="text-sm text-gray-600">Last Check</div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Detailed Metrics */}
-            {data.metrics && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <BarChart3 className="h-5 w-5" />
-                    Metrics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+              {/* Detailed Metrics */}
+              {data.metrics && (
+                <div className="border rounded-lg p-4">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    📊 Metrics
+                  </h3>
                   <div className="grid md:grid-cols-2 gap-3">
                     {data.metrics.map((metric: any, index: number) => (
                       <div
                         key={index}
-                        className="flex justify-between items-center p-3 bg-gradient-to-r from-brand-lightest to-white rounded-lg border hover:shadow-md transition-all"
+                        className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border hover:shadow-md transition-all"
                       >
                         <div className="flex items-center gap-2">
-                          <span className="w-3 h-3 bg-brand rounded-full inline-block" />
+                          <span className="w-3 h-3 bg-blue-500 rounded-full inline-block" />
                           <span className="font-medium text-sm">
                             {metric.label}
                           </span>
                         </div>
-                        <span className="text-sm font-bold text-brand-dark">
+                        <span className="text-sm font-bold text-blue-600">
                           {metric.value}
                         </span>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              )}
 
-            {/* Performance Trends */}
-            {data.trends && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <TrendingUp className="h-5 w-5" />
-                    Trends
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
+              {/* Performance Trends */}
+              {data.trends && (
+                <div className="border rounded-lg p-4">
+                  <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                    📈 Trends
+                  </h3>
                   <div className="space-y-3">
                     {data.trends.map((trend: any, index: number) => (
                       <div
                         key={index}
-                        className="p-3 border rounded-lg bg-gradient-to-r from-green-50 to-brand-lightest hover:shadow-md transition-all"
+                        className="p-3 border rounded-lg bg-green-50 hover:shadow-md transition-all"
                       >
                         <div className="flex items-start gap-3">
                           <div className="p-1 bg-green-100 rounded-full">
-                            <TrendingUp className="h-4 w-4 text-green-600" />
+                            📈
                           </div>
                           <div className="flex-1">
                             <div className="font-semibold mb-1">
                               {trend.period}
                             </div>
-                            <div className="text-sm text-muted-foreground">
+                            <div className="text-sm text-gray-600">
                               {trend.description}
                             </div>
                             <div className="mt-1">
@@ -143,23 +143,18 @@ const DetailDialog = ({
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                </div>
+              )}
 
-            {/* Recommendations */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Settings className="h-5 w-5" />
-                  Recommendations
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
+              {/* Recommendations */}
+              <div className="border rounded-lg p-4">
+                <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                  ⚙️ Recommendations
+                </h3>
                 <div className="space-y-2">
                   <div className="p-2 bg-green-50 border border-green-200 rounded-lg">
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      ✅
                       <span className="font-medium text-green-800 text-sm">
                         Continue current operations
                       </span>
@@ -170,7 +165,7 @@ const DetailDialog = ({
                   </div>
                   <div className="p-2 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-center gap-2">
-                      <Activity className="h-4 w-4 text-blue-600" />
+                      📊
                       <span className="font-medium text-blue-800 text-sm">
                         Monitor data quality trends
                       </span>
@@ -180,14 +175,14 @@ const DetailDialog = ({
                     </p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </DialogContent>
-  </Dialog>
-);
+    </div>
+  );
+};
 
 export default function Home() {
   const [selectedCard, setSelectedCard] = useState<{
