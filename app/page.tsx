@@ -195,6 +195,22 @@ const ProjectDetailView = ({ onBack }: { onBack: () => void }) => {
     title: string;
     data: any;
   } | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadStep, setUploadStep] = useState(1);
+  const [uploadFormData, setUploadFormData] = useState({
+    modelName: "",
+    modelVersion: "1.0.0",
+    description: "",
+    modelType: "",
+    framework: "",
+    modelStage: "",
+    externalDependencies: "",
+    trainingDataset: null,
+    targetColumn: "",
+    datasetType: "",
+    modelFile: null,
+    environmentConfig: null,
+  });
 
   const systemHealth = 94;
 
@@ -306,7 +322,10 @@ const ProjectDetailView = ({ onBack }: { onBack: () => void }) => {
                 Projects &gt; AI System Health Monitor
               </div>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -866,6 +885,763 @@ const ProjectDetailView = ({ onBack }: { onBack: () => void }) => {
           data={selectedCard.data}
         />
       )}
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Upload New Model Version
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            {/* Workflow Steps */}
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-8">
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 1 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 1
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      1
+                    </div>
+                    <div>
+                      <div className="font-medium">Model Upload</div>
+                      <div className="text-xs">Upload and configure model</div>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 2 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 2
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      2
+                    </div>
+                    <div>
+                      <div className="font-medium">Dataset Details</div>
+                      <div className="text-xs">Configure training data</div>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 3 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 3
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      3
+                    </div>
+                    <div>
+                      <div className="font-medium">Preview</div>
+                      <div className="text-xs">Review and submit</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6">
+              {uploadStep === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Model Configuration
+                    </h3>
+                    <p className="text-gray-600">
+                      Please provide the following information about your model.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Model Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={uploadFormData.modelName}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter a unique model name"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Model Version *
+                      </label>
+                      <input
+                        type="text"
+                        value={uploadFormData.modelVersion}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelVersion: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Use semantic versioning (e.g. 1.0.0)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description *
+                    </label>
+                    <textarea
+                      value={uploadFormData.description}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Provide details about this model's purpose and characteristics"
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Model Type *
+                      </label>
+                      <select
+                        value={uploadFormData.modelType}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelType: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select model type</option>
+                        <option value="classification">Classification</option>
+                        <option value="regression">Regression</option>
+                        <option value="clustering">Clustering</option>
+                        <option value="deep-learning">Deep Learning</option>
+                        <option value="time-series">Time-Series</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Framework *
+                      </label>
+                      <select
+                        value={uploadFormData.framework}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            framework: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select framework</option>
+                        <option value="scikit-learn">
+                          Scikit-learn v1.6.1
+                        </option>
+                        <option value="tensorflow">TensorFlow v2.19.0</option>
+                        <option value="pytorch">PyTorch v2.6.0</option>
+                        <option value="transformers">
+                          Transformers v4.50.3
+                        </option>
+                        <option value="onnx">ONNX (latest)</option>
+                        <option value="others">Others</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Model Stage *
+                    </label>
+                    <select
+                      value={uploadFormData.modelStage}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          modelStage: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select model stage</option>
+                      <option value="pre-trained">
+                        Pre-trained (Ready to use)
+                      </option>
+                      <option value="in-training">
+                        In Training (Under development)
+                      </option>
+                      <option value="post-training">
+                        Post Training (Trained but not deployed)
+                      </option>
+                      <option value="production">
+                        Production (Deployed and serving)
+                      </option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This helps determine what datasets and validation we need
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      External Dependencies (Optional)
+                    </label>
+                    <textarea
+                      value={uploadFormData.externalDependencies}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          externalDependencies: e.target.value,
+                        })
+                      }
+                      placeholder="e.g., BERT tokenizer, Word2Vec embeddings, external APIs, etc."
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Describe any external dependencies or special requirements
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Environment Configuration (Optional)
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      <div className="text-sm font-medium text-gray-600">
+                        Upload environment configuration
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        requirements.txt, Dockerfile, or similar
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Model File *
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      <div className="text-sm font-medium text-gray-600">
+                        Upload model file
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Supports .pkl format
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Dataset Configuration
+                    </h3>
+                    <p className="text-gray-600">
+                      Upload and configure your training data and validation
+                      datasets.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Training Dataset *
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Upload CSV, JSON, or DataFrame file used for training
+                    </p>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      <div className="text-sm font-medium text-gray-600">
+                        Upload training dataset
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Click or drag training data file here
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Target Column (Dataset) *
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Found 23 columns in your dataset
+                    </p>
+                    <input
+                      type="text"
+                      value={uploadFormData.targetColumn}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          targetColumn: e.target.value,
+                        })
+                      }
+                      placeholder="target"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-500 mb-2">
+                        Available columns:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {[
+                          "target",
+                          "age",
+                          "income",
+                          "credit_score",
+                          "years_experience",
+                          "monthly_expenses",
+                          "loan_amount",
+                          "debt_to_income_ratio",
+                          "savings_account_balance",
+                          "education_level",
+                          "employment_status",
+                          "loan_type",
+                          "property_ownership",
+                          "payment_frequency",
+                          "bank_relationship",
+                          "gender",
+                          "race",
+                          "age_group",
+                          "disability_status",
+                          "marital_status",
+                          "religion",
+                          "education",
+                          "zip_code",
+                        ].map((col) => (
+                          <span
+                            key={col}
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              col === uploadFormData.targetColumn
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {col}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Dataset Type
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="tabular"
+                          checked={uploadFormData.datasetType === "tabular"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          CSV, Excel, TSV - Tabular Data
+                        </span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="text"
+                          checked={uploadFormData.datasetType === "text"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          TXT, DOC, PDF - Text Data
+                        </span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="structured"
+                          checked={uploadFormData.datasetType === "structured"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          JSON, JSONL - Structured Data
+                        </span>
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This helps optimize the analysis for your specific use
+                      case.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Review & Submit
+                    </h3>
+                    <p className="text-gray-600">
+                      Please review your configuration before submitting.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <h4 className="font-medium text-gray-900">
+                          Model Information
+                        </h4>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="font-medium">Model Name:</span>{" "}
+                          {uploadFormData.modelName || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model Type:</span>{" "}
+                          {uploadFormData.modelType || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Version:</span>{" "}
+                          {uploadFormData.modelVersion}
+                        </div>
+                        <div>
+                          <span className="font-medium">Framework:</span>{" "}
+                          {uploadFormData.framework || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model Stage:</span>{" "}
+                          {uploadFormData.modelStage || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model File:</span>{" "}
+                          {uploadFormData.modelFile
+                            ? "Selected"
+                            : "Not uploaded"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                        <h4 className="font-medium text-gray-900">
+                          Dataset Information
+                        </h4>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="font-medium">Training Dataset:</span>{" "}
+                          {uploadFormData.trainingDataset
+                            ? "Uploaded"
+                            : "Not uploaded"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Dataset Type:</span>{" "}
+                          {uploadFormData.datasetType || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Target Column:</span>{" "}
+                          {uploadFormData.targetColumn || "Not specified"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <svg
+                        className="w-5 h-5 text-yellow-600 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <div>
+                        <h4 className="font-medium text-yellow-900">
+                          Clicking Submit will:
+                        </h4>
+                        <ul className="mt-2 text-sm text-yellow-800 space-y-1">
+                          <li>• Process your model and dataset uploads</li>
+                          <li>• Generate a comprehensive analysis report</li>
+                          <li>
+                            • Create visualization and metrics for your model
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                Cancel
+              </button>
+
+              <div className="flex items-center gap-3">
+                {uploadStep > 1 && (
+                  <button
+                    onClick={() => setUploadStep(uploadStep - 1)}
+                    className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                    Previous
+                  </button>
+                )}
+
+                {uploadStep < 3 ? (
+                  <button
+                    onClick={() => setUploadStep(uploadStep + 1)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Next
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      // Handle submit logic here
+                      setShowUploadModal(false);
+                      setUploadStep(1);
+                      setUploadFormData({
+                        modelName: "",
+                        modelVersion: "1.0.0",
+                        description: "",
+                        modelType: "",
+                        framework: "",
+                        modelStage: "",
+                        externalDependencies: "",
+                        trainingDataset: null,
+                        targetColumn: "",
+                        datasetType: "",
+                        modelFile: null,
+                        environmentConfig: null,
+                      });
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    Submit
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -876,6 +1652,22 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
     title: string;
     data: any;
   } | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadStep, setUploadStep] = useState(1);
+  const [uploadFormData, setUploadFormData] = useState({
+    modelName: "",
+    modelVersion: "1.0.0",
+    description: "",
+    modelType: "",
+    framework: "",
+    modelStage: "",
+    externalDependencies: "",
+    trainingDataset: null,
+    targetColumn: "",
+    datasetType: "",
+    modelFile: null,
+    environmentConfig: null,
+  });
 
   const systemHealth = 67;
 
@@ -1010,7 +1802,10 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                 Projects &gt; Critical Alert Dashboard
               </div>
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => setShowUploadModal(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -1584,6 +2379,763 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
           data={selectedCard.data}
         />
       )}
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <h2 className="text-xl font-semibold text-gray-900">
+                  Upload New Model Version
+                </h2>
+              </div>
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            {/* Workflow Steps */}
+            <div className="px-6 py-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-8">
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 1 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 1
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      1
+                    </div>
+                    <div>
+                      <div className="font-medium">Model Upload</div>
+                      <div className="text-xs">Upload and configure model</div>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 2 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 2
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      2
+                    </div>
+                    <div>
+                      <div className="font-medium">Dataset Details</div>
+                      <div className="text-xs">Configure training data</div>
+                    </div>
+                  </div>
+                  <div
+                    className={`flex items-center gap-2 ${
+                      uploadStep >= 3 ? "text-blue-600" : "text-gray-400"
+                    }`}
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                        uploadStep >= 3
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      3
+                    </div>
+                    <div>
+                      <div className="font-medium">Preview</div>
+                      <div className="text-xs">Review and submit</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Modal Content */}
+            <div className="p-6">
+              {uploadStep === 1 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Model Configuration
+                    </h3>
+                    <p className="text-gray-600">
+                      Please provide the following information about your model.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Model Name *
+                      </label>
+                      <input
+                        type="text"
+                        value={uploadFormData.modelName}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelName: e.target.value,
+                          })
+                        }
+                        placeholder="Enter a unique model name"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Model Version *
+                      </label>
+                      <input
+                        type="text"
+                        value={uploadFormData.modelVersion}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelVersion: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Use semantic versioning (e.g. 1.0.0)
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      value={uploadFormData.description}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          description: e.target.value,
+                        })
+                      }
+                      placeholder="Provide details about this model's purpose and characteristics"
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Model Type *
+                      </label>
+                      <select
+                        value={uploadFormData.modelType}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            modelType: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select model type</option>
+                        <option value="classification">Classification</option>
+                        <option value="regression">Regression</option>
+                        <option value="clustering">Clustering</option>
+                        <option value="nlp">Natural Language Processing</option>
+                        <option value="computer-vision">Computer Vision</option>
+                        <option value="recommendation">Recommendation</option>
+                        <option value="other">Other</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Framework *
+                      </label>
+                      <select
+                        value={uploadFormData.framework}
+                        onChange={(e) =>
+                          setUploadFormData({
+                            ...uploadFormData,
+                            framework: e.target.value,
+                          })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">Select framework</option>
+                        <option value="scikit-learn">
+                          Scikit-learn v1.6.1
+                        </option>
+                        <option value="tensorflow">TensorFlow v2.19.0</option>
+                        <option value="pytorch">PyTorch v2.6.0</option>
+                        <option value="transformers">
+                          Transformers v4.50.3
+                        </option>
+                        <option value="onnx">ONNX (latest)</option>
+                        <option value="others">Others</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Model Stage *
+                    </label>
+                    <select
+                      value={uploadFormData.modelStage}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          modelStage: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select model stage</option>
+                      <option value="pre-trained">
+                        Pre-trained (Ready to use)
+                      </option>
+                      <option value="in-training">
+                        In Training (Under development)
+                      </option>
+                      <option value="post-training">
+                        Post Training (Trained but not deployed)
+                      </option>
+                      <option value="production">
+                        Production (Deployed and serving)
+                      </option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This helps determine what datasets and validation we need
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      External Dependencies
+                    </label>
+                    <textarea
+                      value={uploadFormData.externalDependencies}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          externalDependencies: e.target.value,
+                        })
+                      }
+                      placeholder="e.g., BERT tokenizer, Word2Vec embeddings, external APIs, etc."
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Describe any external dependencies or special requirements
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Environment Configuration
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <svg
+                          className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+                        <div className="text-sm font-medium text-gray-600">
+                          Upload environment configuration
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          requirements.txt, Dockerfile, or similar
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Model File *
+                      </label>
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                        <svg
+                          className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          />
+                        </svg>
+                        <div className="text-sm font-medium text-gray-600">
+                          Upload model file
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          Supports .pkl format
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 2 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Dataset Configuration
+                    </h3>
+                    <p className="text-gray-600">
+                      Upload and configure your training data and validation
+                      datasets.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Training Dataset *
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Upload CSV, JSON, or DataFrame file used for training
+                    </p>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      <div className="text-sm font-medium text-gray-600">
+                        Upload training dataset
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Click or drag training data file here
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Target Column (Dataset) *
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                      Found 23 columns in your dataset
+                    </p>
+                    <input
+                      type="text"
+                      value={uploadFormData.targetColumn}
+                      onChange={(e) =>
+                        setUploadFormData({
+                          ...uploadFormData,
+                          targetColumn: e.target.value,
+                        })
+                      }
+                      placeholder="target"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-500 mb-2">
+                        Available columns:
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {[
+                          "target",
+                          "age",
+                          "income",
+                          "credit_score",
+                          "years_experience",
+                          "monthly_expenses",
+                          "loan_amount",
+                          "debt_to_income_ratio",
+                          "savings_account_balance",
+                          "education_level",
+                          "employment_status",
+                          "loan_type",
+                          "property_ownership",
+                          "payment_frequency",
+                          "bank_relationship",
+                          "gender",
+                          "race",
+                          "age_group",
+                          "disability_status",
+                          "marital_status",
+                          "religion",
+                          "education",
+                          "zip_code",
+                        ].map((col) => (
+                          <span
+                            key={col}
+                            className={`px-2 py-1 text-xs rounded-full ${
+                              col === uploadFormData.targetColumn
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {col}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Dataset Type *
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="tabular"
+                          checked={uploadFormData.datasetType === "tabular"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          CSV, Excel, TSV - Tabular Data
+                        </span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="text"
+                          checked={uploadFormData.datasetType === "text"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          TXT, DOC, PDF - Text Data
+                        </span>
+                      </label>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="datasetType"
+                          value="structured"
+                          checked={uploadFormData.datasetType === "structured"}
+                          onChange={(e) =>
+                            setUploadFormData({
+                              ...uploadFormData,
+                              datasetType: e.target.value,
+                            })
+                          }
+                          className="mr-2"
+                        />
+                        <span className="text-sm">
+                          JSON, JSONL - Structured Data
+                        </span>
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      This helps optimize the analysis for your specific use
+                      case.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {uploadStep === 3 && (
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                      Review & Submit
+                    </h3>
+                    <p className="text-gray-600">
+                      Please review your configuration before submitting.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                        <h4 className="font-medium text-gray-900">
+                          Model Information
+                        </h4>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="font-medium">Model Name:</span>{" "}
+                          {uploadFormData.modelName || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model Type:</span>{" "}
+                          {uploadFormData.modelType || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Version:</span>{" "}
+                          {uploadFormData.modelVersion}
+                        </div>
+                        <div>
+                          <span className="font-medium">Framework:</span>{" "}
+                          {uploadFormData.framework || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model Stage:</span>{" "}
+                          {uploadFormData.modelStage || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Model File:</span>{" "}
+                          {uploadFormData.modelFile
+                            ? "Selected"
+                            : "Not uploaded"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg
+                          className="w-5 h-5 text-gray-600"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                        <h4 className="font-medium text-gray-900">
+                          Dataset Information
+                        </h4>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div>
+                          <span className="font-medium">Training Dataset:</span>{" "}
+                          {uploadFormData.trainingDataset
+                            ? "Uploaded"
+                            : "Not uploaded"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Dataset Type:</span>{" "}
+                          {uploadFormData.datasetType || "Not specified"}
+                        </div>
+                        <div>
+                          <span className="font-medium">Target Column:</span>{" "}
+                          {uploadFormData.targetColumn || "Not specified"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start gap-2">
+                      <svg
+                        className="w-5 h-5 text-yellow-600 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                      <div>
+                        <h4 className="font-medium text-yellow-900">
+                          Clicking Submit will:
+                        </h4>
+                        <ul className="mt-2 text-sm text-yellow-800 space-y-1">
+                          <li>• Process your model and dataset uploads</li>
+                          <li>• Generate a comprehensive analysis report</li>
+                          <li>
+                            • Create visualization and metrics for your model
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+              <button
+                onClick={() => setShowUploadModal(false)}
+                className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                Cancel
+              </button>
+
+              <div className="flex items-center gap-3">
+                {uploadStep > 1 && (
+                  <button
+                    onClick={() => setUploadStep(uploadStep - 1)}
+                    className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                    Previous
+                  </button>
+                )}
+
+                {uploadStep < 3 ? (
+                  <button
+                    onClick={() => setUploadStep(uploadStep + 1)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Next
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      // Handle submit logic here
+                      setShowUploadModal(false);
+                      setUploadStep(1);
+                      setUploadFormData({
+                        modelName: "",
+                        modelVersion: "1.0.0",
+                        description: "",
+                        modelType: "",
+                        framework: "",
+                        modelStage: "",
+                        externalDependencies: "",
+                        trainingDataset: null,
+                        targetColumn: "",
+                        datasetType: "",
+                        modelFile: null,
+                        environmentConfig: null,
+                      });
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    Submit
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1722,19 +3274,16 @@ export default function Home() {
                 Navigation
               </h3>
               <div className="space-y-1">
-                <div className="flex items-center gap-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="flex items-center gap-3 p-2 bg-blue-100 rounded-lg">
                   <Shield className="h-4 w-4 text-blue-600" />
                   <span className="text-sm font-medium text-blue-700">
                     Dashboard
                   </span>
                 </div>
-                <Link
-                  href="/settings"
-                  className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg cursor-pointer"
-                >
-                  <Settings className="h-4 w-4 text-slate-600" />
-                  <span className="text-sm text-slate-600">Settings</span>
-                </Link>
+                <div className="flex items-center gap-3 p-2 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer">
+                  <Settings className="h-4 w-4" />
+                  <span className="text-sm">Settings</span>
+                </div>
               </div>
             </div>
 
