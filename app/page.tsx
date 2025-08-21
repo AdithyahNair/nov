@@ -22,6 +22,11 @@ import {
   Zap,
   Shield,
   BarChart3,
+  ArrowLeft,
+  Search,
+  Filter,
+  Star,
+  AlertTriangle,
 } from "lucide-react";
 
 interface DetailDialogProps {
@@ -184,7 +189,8 @@ const DetailDialog = ({
   );
 };
 
-export default function Home() {
+// Project Detail View Component
+const ProjectDetailView = ({ onBack }: { onBack: () => void }) => {
   const [selectedCard, setSelectedCard] = useState<{
     title: string;
     data: any;
@@ -275,6 +281,520 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/20">
+      {/* Back Button */}
+      <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-slate-600 hover:text-slate-800 transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            <span>Back to Dashboard</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="p-4 sm:p-6 lg:p-8">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Main Dashboard Card */}
+          <Card
+            className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 border border-slate-200 transition-all duration-500 cursor-pointer group"
+            onClick={() =>
+              openDetailDialog("AI System Health Overview", {
+                status: "OPTIMAL",
+                accuracy: "96.2%",
+                uptime: "99.7%",
+                lastCheck: "2 hours ago",
+                metrics: [
+                  { label: "Model Performance", value: "96.2% (>90%)" },
+                  { label: "Data Quality Score", value: "98.1% (>95%)" },
+                  { label: "Drift Detection", value: "Normal parameters" },
+                  { label: "Next Review", value: "24 hours" },
+                ],
+              })
+            }
+          >
+            {/* Decorative background elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-transparent rounded-full -translate-y-16 translate-x-16" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-green-100/20 to-transparent rounded-full translate-y-12 -translate-x-12" />
+
+            <CardHeader className="pb-4 relative z-10">
+              <CardTitle className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  AI System Health Overview
+                </div>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pb-4">
+              <div className="space-y-4">
+                {/* Executive Summary */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-6">
+                    <div className="flex-shrink-0 text-center">
+                      <div className="text-4xl font-bold text-teal-600 mb-2">
+                        {systemHealth}
+                      </div>
+                      <div className="text-sm font-semibold text-slate-700">
+                        Health Score
+                      </div>
+                    </div>
+                    <div className="flex-1 space-y-4">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="flex items-center gap-3 p-3 bg-white border border-green-300 rounded-lg hover:shadow-md transition-all">
+                          <div className="p-1.5 bg-green-100 rounded-full">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-black">
+                              Performance
+                            </div>
+                            <div className="text-lg font-bold text-green-600">
+                              96.2%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100 hover:shadow-md transition-all">
+                          <div className="p-1.5 bg-blue-100 rounded-full">
+                            <CheckCircle className="h-4 w-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-slate-800">
+                              Quality
+                            </div>
+                            <div className="text-lg font-bold text-blue-600">
+                              98.1%
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-white border border-green-300 rounded-lg hover:shadow-md transition-all">
+                          <div className="p-1.5 bg-green-100 rounded-full">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-black">
+                              Drift
+                            </div>
+                            <div className="text-lg font-bold text-green-600">
+                              Normal
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-slate-100 hover:shadow-md transition-all">
+                          <div className="p-1.5 bg-slate-100 rounded-full">
+                            <Clock className="h-4 w-4 text-slate-600" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-sm text-slate-800">
+                              Last Update
+                            </div>
+                            <div className="text-lg font-bold text-slate-600">
+                              2 hrs ago
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Additional System Metrics */}
+                  <div className="grid grid-cols-2 gap-4 pt-3 border-t">
+                    <div className="text-center p-3 bg-muted/30 rounded">
+                      <div className="text-sm text-muted-foreground">
+                        Next Review
+                      </div>
+                      <div className="text-lg font-bold text-green-600">
+                        24 hours
+                      </div>
+                    </div>
+                    <div className="text-center p-3 bg-muted/30 rounded">
+                      <div className="text-sm text-muted-foreground">
+                        Uptime
+                      </div>
+                      <div className="text-lg font-bold text-blue-600">
+                        99.7%
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* System Status Indicators */}
+                  <div className="pt-3 border-t">
+                    <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                      <Activity className="h-4 w-4" />
+                      System Status
+                    </h4>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
+                        <span className="text-sm font-medium text-black">
+                          Data Pipeline
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
+                          <span className="text-xs text-black">Active</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
+                        <span className="text-sm font-medium text-black">
+                          Model Training
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
+                          <span className="text-xs text-black">Scheduled</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
+                        <span className="text-sm font-medium text-black">
+                          Alert System
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
+                          <span className="text-xs text-black">Monitoring</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* AI Systems Grid */}
+          <div className="grid lg:grid-cols-3 gap-6">
+            <Card
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              onClick={() =>
+                openDetailDialog("Production Optimization AI", productionAI)
+              }
+            >
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-brand/10 rounded-lg">
+                    <Settings className="h-5 w-5 text-brand" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">
+                      Production Optimization AI
+                    </CardTitle>
+                    <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
+                      ✓ OPERATIONAL
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">Accuracy</p>
+                    <p className="text-xl font-bold text-brand">95.8%</p>
+                  </div>
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">Confidence</p>
+                    <p className="text-xl font-bold text-brand">92%</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Cost Impact</span>
+                    <span className="font-bold text-green-600">+$2.3M</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Uptime</span>
+                    <span className="font-bold">99.7%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              onClick={() =>
+                openDetailDialog("Predictive Maintenance AI", maintenanceAI)
+              }
+            >
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-brand/10 rounded-lg">
+                    <Wrench className="h-5 w-5 text-brand" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">
+                      Predictive Maintenance AI
+                    </CardTitle>
+                    <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
+                      ✓ OPERATIONAL
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">
+                      Failure Prediction
+                    </p>
+                    <p className="text-xl font-bold text-brand">94.1%</p>
+                  </div>
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">
+                      False Positive
+                    </p>
+                    <p className="text-xl font-bold text-green-600">3.2%</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Cost Reduction</span>
+                    <span className="font-bold text-green-600">38%</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Assets Monitored</span>
+                    <span className="font-bold">847</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              onClick={() =>
+                openDetailDialog("Drilling Optimization AI", drillingAI)
+              }
+            >
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-brand/10 rounded-lg">
+                    <Zap className="h-5 w-5 text-brand" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-base">
+                      Drilling Optimization AI
+                    </CardTitle>
+                    <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
+                      ✓ OPERATIONAL
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">
+                      NPT Reduction
+                    </p>
+                    <p className="text-xl font-bold text-brand">42%</p>
+                  </div>
+                  <div className="text-center p-3 bg-white/80 rounded">
+                    <p className="text-xs text-muted-foreground">Efficiency</p>
+                    <p className="text-xl font-bold text-brand">+27%</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Stuck Pipe Prevention</span>
+                    <span className="font-bold text-green-600">97.3%</span>
+                  </div>
+                  <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
+                    <span>Wells Optimized</span>
+                    <span className="font-bold">23</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Performance Trends & Financial Impact */}
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Performance Trends */}
+            <Card
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              onClick={() =>
+                openDetailDialog("30-Day Performance Trends", {
+                  status: "TRENDING",
+                  accuracy: "Historical Analysis",
+                  metrics: [
+                    { label: "Production AI Trend", value: "Steady 95-97%" },
+                    {
+                      label: "Maintenance AI Trend",
+                      value: "Consistent 93-95%",
+                    },
+                    { label: "Drilling AI Trend", value: "Stable 94-96%" },
+                    {
+                      label: "Overall Trend Status",
+                      value: "Within normal bands",
+                    },
+                  ],
+                })
+              }
+            >
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-brand" />
+                  30-Day Performance Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {/* Production AI Trend */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-sm">Production AI</span>
+                      <span className="text-xs text-green-600">
+                        Steady 95-97%
+                      </span>
+                    </div>
+                    <Progress value={96} className="h-2" />
+                  </div>
+
+                  {/* Maintenance AI Trend */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-sm">
+                        Maintenance AI
+                      </span>
+                      <span className="text-xs text-green-600">
+                        Consistent 93-95%
+                      </span>
+                    </div>
+                    <Progress value={94} className="h-2" />
+                  </div>
+
+                  {/* Drilling AI Trend */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium text-sm">Drilling AI</span>
+                      <span className="text-xs text-green-600">
+                        Stable 94-96%
+                      </span>
+                    </div>
+                    <Progress value={97} className="h-2" />
+                  </div>
+
+                  <div className="text-center p-3 bg-muted/50 rounded mt-4">
+                    <p className="font-bold text-sm text-black">
+                      All trends within normal operating bands
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Financial Impact Summary */}
+            <Card
+              className="hover:shadow-lg transition-all duration-300 cursor-pointer"
+              onClick={() =>
+                openDetailDialog("Financial Impact Analysis", {
+                  status: "POSITIVE ROI",
+                  accuracy: "Financial Analysis Complete",
+                  metrics: [
+                    {
+                      label: "YTD Cost Avoidance",
+                      value: financialData.ytdCostAvoidance,
+                    },
+                    {
+                      label: "Operational Efficiency Gain",
+                      value: financialData.operationalEfficiencyGain,
+                    },
+                    {
+                      label: "ROI on AI Investment",
+                      value: financialData.roiOnAI,
+                    },
+                    {
+                      label: "Downtime Prevented",
+                      value: financialData.downtimePrevented,
+                    },
+                  ],
+                })
+              }
+            >
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-brand" />
+                  Financial Impact Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-brand-lightest rounded-lg">
+                    <div className="text-2xl font-bold mb-1 text-green-600">
+                      {financialData.ytdCostAvoidance}
+                    </div>
+                    <div className="text-xs text-muted-foreground font-medium">
+                      YTD Cost Avoidance
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-brand-lightest rounded-lg">
+                    <div className="text-2xl font-bold mb-1 text-blue-600">
+                      {financialData.operationalEfficiencyGain}
+                    </div>
+                    <div className="text-xs text-muted-foreground font-medium">
+                      Efficiency Gain
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-brand-lightest rounded-lg">
+                    <div className="text-2xl font-bold mb-1 text-purple-600">
+                      {financialData.roiOnAI}
+                    </div>
+                    <div className="text-xs text-muted-foreground font-medium">
+                      ROI on AI Investment
+                    </div>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-teal-50 to-brand-lightest rounded-lg">
+                    <div className="text-2xl font-bold mb-1 text-teal-600">
+                      {financialData.downtimePrevented}
+                    </div>
+                    <div className="text-xs text-muted-foreground font-medium">
+                      Downtime Prevented
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white/60 backdrop-blur-sm border-t border-slate-200/60">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="text-center text-slate-600">
+            <p className="text-sm font-medium">
+              24/7 Critical Response Team • Emergency Escalation: Executive
+              alerting active
+            </p>
+            <p className="text-xs mt-1 text-slate-500">
+              Model Engineers: On-site within 4 hours • Dashboard auto-refreshes
+              every 5 minutes
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Detail Dialog */}
+      {selectedCard && (
+        <DetailDialog
+          open={!!selectedCard}
+          onOpenChange={(open) => {
+            console.log("Dialog onOpenChange:", open);
+            if (!open) setSelectedCard(null);
+          }}
+          title={selectedCard.title}
+          data={selectedCard.data}
+        />
+      )}
+    </div>
+  );
+};
+
+// Main Dashboard Component
+export default function Home() {
+  const [showProjectDetail, setShowProjectDetail] = useState(false);
+
+  if (showProjectDetail) {
+    return <ProjectDetailView onBack={() => setShowProjectDetail(false)} />;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/20">
       {/* PRISM Header */}
       <div className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-0 py-4">
@@ -362,464 +882,104 @@ export default function Home() {
 
         {/* Main Dashboard Content */}
         <div className="flex-1 p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto space-y-6 pr-4">
-            {/* Main Dashboard Card */}
-            <Card
-              className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 border border-slate-200 transition-all duration-500 cursor-pointer group"
-              onClick={() =>
-                openDetailDialog("AI System Health Overview", {
-                  status: "OPTIMAL",
-                  accuracy: "96.2%",
-                  uptime: "99.7%",
-                  lastCheck: "2 hours ago",
-                  metrics: [
-                    { label: "Model Performance", value: "96.2% (>90%)" },
-                    { label: "Data Quality Score", value: "98.1% (>95%)" },
-                    { label: "Drift Detection", value: "Normal parameters" },
-                    { label: "Next Review", value: "24 hours" },
-                  ],
-                })
-              }
-            >
-              {/* Decorative background elements */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-transparent rounded-full -translate-y-16 translate-x-16" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-green-100/20 to-transparent rounded-full translate-y-12 -translate-x-12" />
+          <div className="max-w-7xl mx-auto space-y-6">
+            {/* Dashboard Header */}
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold text-gray-900">
+                PRISM Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Monitor your AI systems and ensure compliance across all
+                projects.
+              </p>
+            </div>
 
-              <CardHeader className="pb-4 relative z-10">
-                <CardTitle className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    AI System Health Overview
+            {/* Projects Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5 text-gray-600" />
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    Projects
+                  </h2>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search projects..."
+                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
                   </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pb-4">
-                <div className="space-y-4">
-                  {/* Executive Summary */}
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-6">
-                      <div className="flex-shrink-0 text-center">
-                        <div className="text-4xl font-bold text-teal-600 mb-2">
-                          {systemHealth}
+                  <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                    <Filter className="h-4 w-4" />
+                    Filter
+                  </button>
+                </div>
+              </div>
+
+              {/* Project Card */}
+              <Card
+                className="hover:shadow-lg transition-all duration-300 cursor-pointer border-2 hover:border-blue-300"
+                onClick={() => setShowProjectDetail(true)}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg">
+                        <Star className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          AI System Health Monitor
+                        </h3>
+                        <p className="text-sm text-gray-600">
+                          Production AI systems monitoring and optimization
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge className="bg-blue-100 text-blue-800 text-xs">
+                            Production AI
+                          </Badge>
+                          <Badge className="bg-green-100 text-green-800 text-xs">
+                            Operational
+                          </Badge>
                         </div>
-                        <div className="text-sm font-semibold text-slate-700">
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-6">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-900">
+                          94
+                        </div>
+                        <div className="text-xs text-gray-600">
                           Health Score
                         </div>
                       </div>
-                      <div className="flex-1 space-y-4">
-                        <div className="grid grid-cols-2 gap-3">
-                          <div className="flex items-center gap-3 p-3 bg-white border border-green-300 rounded-lg hover:shadow-md transition-all">
-                            <div className="p-1.5 bg-green-100 rounded-full">
-                              <CheckCircle className="h-4 w-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm text-black">
-                                Performance
-                              </div>
-                              <div className="text-lg font-bold text-green-600">
-                                96.2%
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100 hover:shadow-md transition-all">
-                            <div className="p-1.5 bg-blue-100 rounded-full">
-                              <CheckCircle className="h-4 w-4 text-blue-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm text-slate-800">
-                                Quality
-                              </div>
-                              <div className="text-lg font-bold text-blue-600">
-                                98.1%
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-white border border-green-300 rounded-lg hover:shadow-md transition-all">
-                            <div className="p-1.5 bg-green-100 rounded-full">
-                              <CheckCircle className="h-4 w-4 text-green-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm text-black">
-                                Drift
-                              </div>
-                              <div className="text-lg font-bold text-green-600">
-                                Normal
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-slate-100 hover:shadow-md transition-all">
-                            <div className="p-1.5 bg-slate-100 rounded-full">
-                              <Clock className="h-4 w-4 text-slate-600" />
-                            </div>
-                            <div>
-                              <div className="font-semibold text-sm text-slate-800">
-                                Last Update
-                              </div>
-                              <div className="text-lg font-bold text-slate-600">
-                                2 hrs ago
-                              </div>
-                            </div>
-                          </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-gray-900">
+                          3
                         </div>
+                        <div className="text-xs text-gray-600">AI Models</div>
                       </div>
-                    </div>
-
-                    {/* Additional System Metrics */}
-                    <div className="grid grid-cols-2 gap-4 pt-3 border-t">
-                      <div className="text-center p-3 bg-muted/30 rounded">
-                        <div className="text-sm text-muted-foreground">
-                          Next Review
-                        </div>
-                        <div className="text-lg font-bold text-green-600">
-                          24 hours
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm text-green-600">Active</span>
                       </div>
-                      <div className="text-center p-3 bg-muted/30 rounded">
-                        <div className="text-sm text-muted-foreground">
-                          Uptime
-                        </div>
-                        <div className="text-lg font-bold text-blue-600">
-                          99.7%
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* System Status Indicators */}
-                    <div className="pt-3 border-t">
-                      <h4 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
-                        <Activity className="h-4 w-4" />
-                        System Status
-                      </h4>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
-                          <span className="text-sm font-medium text-black">
-                            Data Pipeline
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
-                            <span className="text-xs text-black">Active</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
-                          <span className="text-sm font-medium text-black">
-                            Model Training
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
-                            <span className="text-xs text-black">
-                              Scheduled
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-between p-2 bg-white border border-green-300 rounded-lg">
-                          <span className="text-sm font-medium text-black">
-                            Alert System
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse inline-block" />
-                            <span className="text-xs text-black">
-                              Monitoring
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* AI Systems Grid */}
-            <div className="grid lg:grid-cols-3 gap-6">
-              <Card
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  openDetailDialog("Production Optimization AI", productionAI)
-                }
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand/10 rounded-lg">
-                      <Settings className="h-5 w-5 text-brand" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">
-                        Production Optimization AI
-                      </CardTitle>
-                      <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
-                        ✓ OPERATIONAL
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">Accuracy</p>
-                      <p className="text-xl font-bold text-brand">95.8%</p>
-                    </div>
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">
-                        Confidence
-                      </p>
-                      <p className="text-xl font-bold text-brand">92%</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Cost Impact</span>
-                      <span className="font-bold text-green-600">+$2.3M</span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Uptime</span>
-                      <span className="font-bold">99.7%</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  openDetailDialog("Predictive Maintenance AI", maintenanceAI)
-                }
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand/10 rounded-lg">
-                      <Wrench className="h-5 w-5 text-brand" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">
-                        Predictive Maintenance AI
-                      </CardTitle>
-                      <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
-                        ✓ OPERATIONAL
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">
-                        Failure Prediction
-                      </p>
-                      <p className="text-xl font-bold text-brand">94.1%</p>
-                    </div>
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">
-                        False Positive
-                      </p>
-                      <p className="text-xl font-bold text-green-600">3.2%</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Cost Reduction</span>
-                      <span className="font-bold text-green-600">38%</span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Assets Monitored</span>
-                      <span className="font-bold">847</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  openDetailDialog("Drilling Optimization AI", drillingAI)
-                }
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-brand/10 rounded-lg">
-                      <Zap className="h-5 w-5 text-brand" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-base">
-                        Drilling Optimization AI
-                      </CardTitle>
-                      <Badge className="bg-white border border-blue-300 text-black text-xs mt-1 hover:bg-white">
-                        ✓ OPERATIONAL
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">
-                        NPT Reduction
-                      </p>
-                      <p className="text-xl font-bold text-brand">42%</p>
-                    </div>
-                    <div className="text-center p-3 bg-white/80 rounded">
-                      <p className="text-xs text-muted-foreground">
-                        Efficiency
-                      </p>
-                      <p className="text-xl font-bold text-brand">+27%</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Stuck Pipe Prevention</span>
-                      <span className="font-bold text-green-600">97.3%</span>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-white/80 rounded text-sm">
-                      <span>Wells Optimized</span>
-                      <span className="font-bold">23</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Performance Trends & Financial Impact */}
-            <div className="grid lg:grid-cols-2 gap-6">
-              {/* Performance Trends */}
-              <Card
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  openDetailDialog("30-Day Performance Trends", {
-                    status: "TRENDING",
-                    accuracy: "Historical Analysis",
-                    metrics: [
-                      { label: "Production AI Trend", value: "Steady 95-97%" },
-                      {
-                        label: "Maintenance AI Trend",
-                        value: "Consistent 93-95%",
-                      },
-                      { label: "Drilling AI Trend", value: "Stable 94-96%" },
-                      {
-                        label: "Overall Trend Status",
-                        value: "Within normal bands",
-                      },
-                    ],
-                  })
-                }
-              >
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-brand" />
-                    30-Day Performance Trends
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {/* Production AI Trend */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">
-                          Production AI
-                        </span>
-                        <span className="text-xs text-green-600">
-                          Steady 95-97%
-                        </span>
-                      </div>
-                      <Progress value={96} className="h-2" />
-                    </div>
-
-                    {/* Maintenance AI Trend */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">
-                          Maintenance AI
-                        </span>
-                        <span className="text-xs text-green-600">
-                          Consistent 93-95%
-                        </span>
-                      </div>
-                      <Progress value={94} className="h-2" />
-                    </div>
-
-                    {/* Drilling AI Trend */}
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium text-sm">Drilling AI</span>
-                        <span className="text-xs text-green-600">
-                          Stable 94-96%
-                        </span>
-                      </div>
-                      <Progress value={97} className="h-2" />
-                    </div>
-
-                    <div className="text-center p-3 bg-muted/50 rounded mt-4">
-                      <p className="font-bold text-sm text-black">
-                        All trends within normal operating bands
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Financial Impact Summary */}
-              <Card
-                className="hover:shadow-lg transition-all duration-300 cursor-pointer"
-                onClick={() =>
-                  openDetailDialog("Financial Impact Analysis", {
-                    status: "POSITIVE ROI",
-                    accuracy: "Financial Analysis Complete",
-                    metrics: [
-                      {
-                        label: "YTD Cost Avoidance",
-                        value: financialData.ytdCostAvoidance,
-                      },
-                      {
-                        label: "Operational Efficiency Gain",
-                        value: financialData.operationalEfficiencyGain,
-                      },
-                      {
-                        label: "ROI on AI Investment",
-                        value: financialData.roiOnAI,
-                      },
-                      {
-                        label: "Downtime Prevented",
-                        value: financialData.downtimePrevented,
-                      },
-                    ],
-                  })
-                }
-              >
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-brand" />
-                    Financial Impact Summary
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-brand-lightest rounded-lg">
-                      <div className="text-2xl font-bold mb-1 text-green-600">
-                        {financialData.ytdCostAvoidance}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-medium">
-                        YTD Cost Avoidance
-                      </div>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-brand-lightest rounded-lg">
-                      <div className="text-2xl font-bold mb-1 text-blue-600">
-                        {financialData.operationalEfficiencyGain}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-medium">
-                        Efficiency Gain
-                      </div>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-brand-lightest rounded-lg">
-                      <div className="text-2xl font-bold mb-1 text-purple-600">
-                        {financialData.roiOnAI}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-medium">
-                        ROI on AI Investment
-                      </div>
-                    </div>
-                    <div className="text-center p-4 bg-gradient-to-br from-teal-50 to-brand-lightest rounded-lg">
-                      <div className="text-2xl font-bold mb-1 text-teal-600">
-                        {financialData.downtimePrevented}
-                      </div>
-                      <div className="text-xs text-muted-foreground font-medium">
-                        Downtime Prevented
+                      <div className="text-gray-400">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
                       </div>
                     </div>
                   </div>
@@ -829,35 +989,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="bg-white/60 backdrop-blur-sm border-t border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="text-center text-slate-600">
-            <p className="text-sm font-medium">
-              24/7 Critical Response Team • Emergency Escalation: Executive
-              alerting active
-            </p>
-            <p className="text-xs mt-1 text-slate-500">
-              Model Engineers: On-site within 4 hours • Dashboard auto-refreshes
-              every 5 minutes
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Detail Dialog */}
-      {selectedCard && (
-        <DetailDialog
-          open={!!selectedCard}
-          onOpenChange={(open) => {
-            console.log("Dialog onOpenChange:", open);
-            if (!open) setSelectedCard(null);
-          }}
-          title={selectedCard.title}
-          data={selectedCard.data}
-        />
-      )}
     </div>
   );
 }
