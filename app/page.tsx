@@ -294,6 +294,95 @@ const ProjectDetailView = ({ onBack }: { onBack: () => void }) => {
         </div>
       </div>
 
+      {/* Project Overview Section */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Project Overview
+              </h1>
+              <div className="text-sm text-gray-600">
+                Projects &gt; AI System Health Monitor
+              </div>
+            </div>
+            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              Upload New Version
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Project Summary Card */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="bg-white border border-slate-200 rounded-lg p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    AI System Health Monitor
+                  </h2>
+                  <span className="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                    active
+                  </span>
+                </div>
+                <p className="text-gray-600 mb-2">
+                  Comprehensive monitoring and health assessment for AI systems
+                </p>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                  <span>AI Health Monitoring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Key Metrics Section */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="grid grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">3</div>
+              <div className="text-sm text-gray-600">MODELS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">3</div>
+              <div className="text-sm text-gray-600">TRAINING DATASETS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">0</div>
+              <div className="text-sm text-gray-600">VALIDATION DATASETS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">0</div>
+              <div className="text-sm text-gray-600">TEST DATASETS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
@@ -909,6 +998,95 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
         </div>
       </div>
 
+      {/* Project Overview Section */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Project Overview
+              </h1>
+              <div className="text-sm text-gray-600">
+                Projects &gt; Critical Alert Dashboard
+              </div>
+            </div>
+            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                />
+              </svg>
+              Upload New Version
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Project Summary Card */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="bg-white border border-slate-200 rounded-lg p-6">
+            <div className="flex items-start justify-between">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <h2 className="text-xl font-bold text-gray-900">
+                    Critical Alert Dashboard
+                  </h2>
+                  <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+                    critical
+                  </span>
+                </div>
+                <p className="text-gray-600 mb-2">
+                  Emergency monitoring system with active alerts and warnings
+                </p>
+                <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                  </svg>
+                  <span>Critical Alert Monitoring</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Key Metrics Section */}
+      <div className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="grid grid-cols-4 gap-6">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">4</div>
+              <div className="text-sm text-gray-600">MODELS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">2</div>
+              <div className="text-sm text-gray-600">TRAINING DATASETS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">1</div>
+              <div className="text-sm text-gray-600">VALIDATION DATASETS</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-gray-900 mb-1">0</div>
+              <div className="text-sm text-gray-600">TEST DATASETS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
@@ -969,7 +1147,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100 hover:shadow-md transition-all">
+                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-blue-100 hover:shadow-md transition-all">
                           <div className="p-1.5 bg-blue-100 rounded-full">
                             <CheckCircle className="h-4 w-4 text-blue-600" />
                           </div>
@@ -995,7 +1173,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-slate-50 to-gray-50 rounded-lg border border-slate-100 hover:shadow-md transition-all">
+                        <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-slate-100 hover:shadow-md transition-all">
                           <div className="p-1.5 bg-slate-100 rounded-full">
                             <Clock className="h-4 w-4 text-slate-600" />
                           </div>
@@ -1339,7 +1517,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <div className="text-center p-4 bg-white rounded-lg border border-red-200">
                     <div className="text-2xl font-bold mb-1 text-black">
                       {financialData.immediateRisk}
                     </div>
@@ -1347,7 +1525,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                       Immediate Risk
                     </div>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <div className="text-center p-4 bg-white rounded-lg border border-red-200">
                     <div className="text-2xl font-bold mb-1 text-black">
                       {financialData.quarterlyExposure}
                     </div>
@@ -1355,7 +1533,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                       Quarterly Exposure
                     </div>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <div className="text-center p-4 bg-white rounded-lg border border-red-200">
                     <div className="text-2xl font-bold mb-1 text-black">
                       {financialData.safetyRiskLevel}
                     </div>
@@ -1363,7 +1541,7 @@ const CriticalAlertDashboard = ({ onBack }: { onBack: () => void }) => {
                       Safety Risk Level
                     </div>
                   </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-red-50 to-red-100 rounded-lg">
+                  <div className="text-center p-4 bg-white rounded-lg border border-red-200">
                     <div className="text-2xl font-bold mb-1 text-black">
                       {financialData.regulatoryCompliance}
                     </div>
@@ -1452,7 +1630,7 @@ export default function Home() {
       aiModels: 4,
       status: "Critical",
       type: "critical",
-      badges: ["Emergency", "Warning"],
+      badges: ["Emergency"],
       icon: "AlertTriangle",
       color: "red",
     },
@@ -1565,13 +1743,13 @@ export default function Home() {
                 Quick Stats
               </h3>
               <div className="space-y-2">
-                <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div className="p-3 bg-white rounded-lg border border-yellow-200">
                   <div className="text-lg font-bold text-yellow-600">80.5</div>
                   <div className="text-xs text-yellow-700">
                     Avg Health Score
                   </div>
                 </div>
-                <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="p-3 bg-white rounded-lg border border-blue-200">
                   <div className="text-lg font-bold text-blue-700">2</div>
                   <div className="text-xs text-blue-600">Active Projects</div>
                 </div>
@@ -1596,7 +1774,7 @@ export default function Home() {
 
             {/* Critical Alert Banner */}
             {isClient && showAlertBanner && (
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+              <div className="bg-white border border-orange-200 rounded-lg p-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="p-1.5 bg-orange-100 rounded-full">
@@ -1639,15 +1817,15 @@ export default function Home() {
 
             {/* Alert Summary */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 text-center">
+              <div className="bg-white border border-orange-200 rounded-lg p-3 text-center">
                 <div className="text-lg font-semibold text-orange-600">1</div>
                 <div className="text-xs text-orange-700">Critical</div>
               </div>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-center">
+              <div className="bg-white border border-yellow-200 rounded-lg p-3 text-center">
                 <div className="text-lg font-semibold text-yellow-600">0</div>
                 <div className="text-xs text-yellow-700">Warning</div>
               </div>
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+              <div className="bg-white border border-blue-200 rounded-lg p-3 text-center">
                 <div className="text-lg font-semibold text-blue-600">2</div>
                 <div className="text-xs text-blue-700">Info</div>
               </div>
@@ -1702,7 +1880,7 @@ export default function Home() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div
-                            className={`p-3 rounded-lg bg-gradient-to-br from-${project.color}-50 to-${project.color}-100`}
+                            className={`p-3 rounded-lg bg-white border border-${project.color}-200`}
                           >
                             <Shield
                               className={`h-6 w-6 text-${project.color}-600`}
